@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeevan Portfolio</title>
+<style>
+body { margin:0; font-family: Arial, sans-serif; }
+.section { min-height:100vh; display:none; flex-direction:column; justify-content:center; align-items:center; }
+
+#home { display:flex; background:url("https://images.unsplash.com/photo-1577085375786-edb0f45560aa?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0") center/cover no-repeat; color:white; }
+button { padding:12px 28px; border:none; border-radius:6px; font-size:18px; cursor:pointer; background:blue; color:white; }
+button:hover { opacity:0.85; }
+
+#myself { display:flex; background:url("https://cdn.pixabay.com/photo/2016/11/14/04/36/abstract-1822254_1280.jpg") center/cover no-repeat; color:white; }
+.content-container { background: rgba(0,0,0,0.6); padding:30px; border-radius:8px; max-width:1000px; width:90%; }
+table { border-collapse: collapse; width:100%; background:white; color:black; margin-top:10px; }
+th, td { border:1px solid black; padding:8px; text-align:left; }
+
+#more { display:flex; background:url("https://cdn.pixabay.com/photo/2015/07/27/19/42/office-863492_1280.jpg") center/cover no-repeat; color:white; }
+#more .box { background:rgba(0,0,0,0.55); padding:25px; border-radius:10px; display:flex; flex-direction:column; gap:15px; width:300px; text-align:center; }
+
+input[type=text], input[type=email], input[type=file] { padding:10px; border-radius:5px; border:none; width:100%; }
+#fileButtons button { width:100%; }
+</style>
+</head>
+<body>
+
+<div id="home" class="section">
+  <h1>Person Portfolio</h1>
+  <button onclick="showMyself()">Log In</button>
+</div>
+
+<div id="myself" class="section">
+  <div class="content-container">
+    <h1>Myself - Jeevan H V</h1>
+    <p>Hassan, Karnataka | 7795780573 | <a href="mailto:hvjeevan77@gmail.com">hvjeevan77@gmail.com</a></p>
+    <p><a href="https://www.linkedin.com/in/jeevan-h-v-bb7b962ba/">LinkedIn Profile</a></p>
+
+    <h3>Education Table</h3>
+    <table>
+      <tr><th>Course</th><th>Institute</th><th>Year</th><th>Result</th></tr>
+      <tr><td>SSLC</td><td>Morarrji Desai School</td><td>2021</td><td>84%</td></tr>
+      <tr><td>PUC</td><td>Morarrji Desai PU College</td><td>2023</td><td>90.5%</td></tr>
+      <tr><td>BE CSE</td><td>Maland College of Engineering</td><td>2023–2027</td><td>6.5 CGPA</td></tr>
+    </table>
+
+    <h3>Skills</h3>
+    <p>Frontend: HTML, CSS, Bootstrap, JS, React.js</p>
+    <p>Backend: Python, Node.js, Express</p>
+    <p>Database: SQLite</p>
+
+    <button onclick="showMore()">View More</button>
+  </div>
+</div>
+
+<div id="more" class="section">
+  <div class="box">
+    <h2>Upload File / Form</h2>
+    <input type="file" id="fileInput" onchange="fileSelected()">
+    <div id="fileButtons" style="display:none; flex-direction:column; gap:10px;">
+      <button id="viewBtn">View File</button>
+      <button id="downloadBtn">Download File</button>
+    </div>
+
+    <h3>Submit Your Details</h3>
+    <form onsubmit="return validateForm()" style="display:flex; flex-direction:column; gap:10px;">
+      <input type="text" id="name" placeholder="Enter Name">
+      <input type="text" id="usn" placeholder="Enter USN (1AB23CS001)">
+      <input type="email" id="email" placeholder="Enter Email">
+      <button type="submit">Submit</button>
+    </form>
+
+    <button onclick="showMyself()">Back</button>
+  </div>
+</div>
+
+<script>
+function showMyself() {
+  document.getElementById('home').style.display='none';
+  document.getElementById('myself').style.display='flex';
+  document.getElementById('more').style.display='none';
+}
+function showMore() {
+  document.getElementById('home').style.display='none';
+  document.getElementById('myself').style.display='none';
+  document.getElementById('more').style.display='flex';
+}
+
+let selectedFileData = null;
+function fileSelected() {
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    selectedFileData = e.target.result;
+    document.getElementById('fileButtons').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('viewBtn').onclick = function() {
+  if (selectedFileData) window.open(selectedFileData, '_blank');
+};
+
+document.getElementById('downloadBtn').onclick = function() {
+  if (selectedFileData) {
+    const a = document.createElement('a');
+    a.href = selectedFileData;
+    const file = document.getElementById('fileInput').files[0];
+    a.download = file ? file.name : 'downloaded_file';
+    a.click();
+  }
+};
+
+function validateForm(){
+  let name=document.getElementById("name").value.trim();
+  let usn=document.getElementById("usn").value.trim();
+  let email=document.getElementById("email").value.trim();
+  if(name===""){ alert("Name required"); return false; }
+  let usnPattern=/^[1-9][A-Z]{2}\d{2}[A-Z]{2}\d{3}$/;
+  if(!usnPattern.test(usn)){ alert("Invalid USN!"); return false; }
+  if(email===""){ alert("Email required"); return false; }
+  alert("Form submitted successfully!"); return false;
+}
+
+document.addEventListener("mousemove", e=>{
+  document.title="X:"+e.clientX+" Y:"+e.clientY;
+});
+</script>
+</body>
+</html>
